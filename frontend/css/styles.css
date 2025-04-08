@@ -1,0 +1,122 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* Header styles */
+  h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  /* Form container */
+  form {
+    max-width: 400px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+  
+  /* Form labels */
+  label {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  /* Input fields */
+  input[type="text"], input[type="date"], input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fdfdfd;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Submit button */
+  .button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  /* Button group for layout */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Add space between buttons */
+  }
+  
+  .clear-button {
+    background-color: #dc3545; /* Red color for clear button */
+  }
+  
+  .clear-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+  }
+  
+  
+  /* Success/Error message */
+  #message {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  #message.success {
+    color: #28a745; /* Green for success */
+  }
+  
+  #message.error {
+    color: #dc3545; /* Red for error */
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    form {
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 20px;
+    }
+  
+    .button {
+      font-size: 14px;
+    }
+  }
+  

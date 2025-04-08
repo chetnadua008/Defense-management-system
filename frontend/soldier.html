@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soldier Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none; /* Initially hide forms */
+        }
+        form.active {
+            display: block; /* Show form when active */
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Soldier Management</h1>
+    <div class="button-container">
+        <button onclick="showForm('viewForm')">View Soldier Details</button>
+        <button onclick="showForm('editForm')">Edit Soldier Details</button>
+        <button onclick="showForm('squadForm')">View Soldier's Squad Details</button>
+    </div>
+
+    <!-- View Soldier Details Form -->
+    <form id="viewForm" class="form">
+        <h2>View Soldier Details</h2>
+        <label for="viewId">Soldier ID:</label>
+        <input type="number" id="viewId" name="viewId" placeholder="Enter Soldier ID">
+        <button type="button" onclick="viewSoldier()">Submit</button>
+    </form>
+
+    <!-- Edit Soldier Details Form -->
+    <form id="editForm" class="form">
+        <h2>Edit Soldier Details</h2>
+        <label for="editId">Soldier ID:</label>
+        <input type="number" id="editId" name="editId" placeholder="Enter Soldier ID">
+        
+        <label for="editName">Name:</label>
+        <input type="text" id="editName" name="editName" placeholder="Enter Soldier Name">
+        
+        <label for="editRank">Rank:</label>
+        <input type="number" id="editRank" name="editRank" placeholder="Enter Rank">
+        
+        <label for="editRole">Role:</label>
+        <input type="text" id="editRole" name="editRole" placeholder="Enter Role">
+        
+        <label for="editDob">Date of Birth:</label>
+        <input type="date" id="editDob" name="editDob">
+        
+        <button type="button" onclick="editSoldier()">Submit</button>
+    </form>
+
+    <!-- View Soldier's Squad Details Form -->
+    <form id="squadForm" class="form">
+        <h2>View Soldier's Squad Details</h2>
+        <label for="squadId">Soldier ID:</label>
+        <input type="number" id="squadId" name="squadId" placeholder="Enter Soldier ID">
+        <button type="button" onclick="viewSquad()">Submit</button>
+    </form>
+
+    <script>
+        const API_URL = 'http://localhost:5000'; // Replace with your backend URL
+
+        function showForm(formId) {
+            // Hide all forms
+            document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
+            // Show the selected form
+            document.getElementById(formId).classList.add('active');
+        }
+
+        async function viewSoldier() {
+            const id = document.getElementById('viewId').value;
+            try {
+                const response = await fetch(`${API_URL}/soldier/${id}`);
+                const data = await response.json();
+                alert(`Soldier Details:\nName: ${data.name}\nRank: ${data.rank}\nRole: ${data.role}\nDOB: ${data.dob}`);
+            } catch (error) {
+                alert('Error fetching soldier details');
+            }
+        }
+
+        async function editSoldier() {
+            const id = document.getElementById('editId').value;
+            const name = document.getElementById('editName').value;
+            const rank = document.getElementById('editRank').value;
+            const role = document.getElementById('editRole').value;
+            const dob = document.getElementById('editDob').value;
+            
+            const payload = { id, name, rank, role, dob };
+            try {
+                const response = await fetch(`${API_URL}/soldier`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                if (response.ok) {
+                    alert('Soldier details updated successfully');
+                } else {
+                    alert('Error updating soldier details');
+                }
+            } catch (error) {
+                alert('Error updating soldier details');
+            }
+        }
+
+        async function viewSquad() {
+            const id = document.getElementById('squadId').value;
+            try {
+                const response = await fetch(`${API_URL}/squad/${id}`);
+                const data = await response.json();
+                alert(`Squad Details:\nName: ${data.squad_name}\nDetails: ${data.squad_details}`);
+            } catch (error) {
+                alert('Error fetching squad details');
+            }
+        }
+    </script>
+</body>
+</html>

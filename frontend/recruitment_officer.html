@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitment Officer</title>
+  <link rel="stylesheet" href="css/styles.css"> <!-- Linking the external CSS -->
+</head>
+<body>
+  <form id="addSoldierForm">
+    <h1>Recruitment Officer</h1>
+    
+    <label for="name">Soldier Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter soldier name" required>
+    
+    <label for="rank">Rank</label>
+    <input type="number" id="rank" name="rank" placeholder="Enter rank" required>
+    
+    <label for="role">Role</label>
+    <input type="text" id="role" name="role" placeholder="Enter role (e.g., Infantry)" required>
+    
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" name="dob" required>
+    
+    <div class="button-group">
+      <button type="submit" class="button">Add Soldier</button>
+      <button type="button" class="button clear-button" id="clearFormButton">Clear Form</button>
+    </div>
+    
+    <div id="message"></div>
+  </form>
+  <script>
+    // Form submission logic
+    document.getElementById('addSoldierForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const rank = document.getElementById('rank').value;
+      const role = document.getElementById('role').value;
+      const dob = document.getElementById('dob').value;
+
+      const res = await fetch('http://localhost:5000/api/soldiers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, rank, role, dob })
+      });
+
+      const msg = document.getElementById('message');
+      if (res.ok) {
+        msg.textContent = '✅ Soldier added successfully!';
+        msg.className = 'success';
+      } else {
+        msg.textContent = '❌ Failed to add soldier!';
+        msg.className = 'error';
+      }
+    });
+
+    // Clear form logic
+    document.getElementById('clearFormButton').addEventListener('click', () => {
+      document.getElementById('addSoldierForm').reset();
+      document.getElementById('message').textContent = ''; // Clear any previous messages
+    });
+  </script>
+</body>
+</html>
