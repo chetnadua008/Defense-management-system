@@ -6,99 +6,161 @@
     <title>Soldier Management</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+            color: #ffffff;
         }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
         .button-container {
             margin-bottom: 20px;
         }
-        button {
-            padding: 10px 15px;
-            margin: 5px;
+
+        .role-button {
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 15px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
             border: none;
-            background-color: #007BFF;
-            color: white;
-            border-radius: 5px;
+            border-radius: 25px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
             cursor: pointer;
         }
-        button:hover {
+
+        .role-button:hover {
             background-color: #0056b3;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            transform: translateY(-3px);
         }
+
+        .role-button:active {
+            background-color: #003f7f;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+        }
+
         form {
+            display: none;
             margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: none; /* Initially hide forms */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         form.active {
-            display: block; /* Show form when active */
+            display: block;
         }
+
         label {
             display: block;
-            margin-top: 10px;
+            margin: 10px 0 5px;
+            text-align: left;
+            color: #ffffff;
         }
-        input, select {
+
+        input, select, button {
             width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
             border-radius: 5px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input, select {
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Soldier Management</h1>
-    <div class="button-container">
-        <button onclick="showForm('viewForm')">View Soldier Details</button>
-        <button onclick="showForm('editForm')">Edit Soldier Details</button>
-        <button onclick="showForm('squadForm')">View Soldier's Squad Details</button>
+    <div class="container">
+        <h1>Soldier Management</h1>
+        <div class="button-container">
+            <button class="role-button" onclick="showForm('viewForm')">View Soldier Details</button>
+            <button class="role-button" onclick="showForm('editForm')">Edit Soldier Details</button>
+            <button class="role-button" onclick="showForm('squadForm')">View Soldier's Squad Details</button>
+        </div>
+
+        <!-- View Soldier Details Form -->
+        <form id="viewForm" class="form">
+            <h2>View Soldier Details</h2>
+            <label for="viewId">Soldier ID:</label>
+            <input type="number" id="viewId" name="viewId" placeholder="Enter Soldier ID">
+            <button type="button" onclick="viewSoldier()">Submit</button>
+        </form>
+
+        <!-- Edit Soldier Details Form -->
+        <form id="editForm" class="form">
+            <h2>Edit Soldier Details</h2>
+            <label for="editId">Soldier ID:</label>
+            <input type="number" id="editId" name="editId" placeholder="Enter Soldier ID">
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="editName" placeholder="Enter Soldier Name">
+            <label for="editRank">Rank:</label>
+            <input type="number" id="editRank" name="editRank" placeholder="Enter Rank">
+            <label for="editRole">Role:</label>
+            <input type="text" id="editRole" name="editRole" placeholder="Enter Role">
+            <label for="editDob">Date of Birth:</label>
+            <input type="date" id="editDob" name="editDob">
+            <button type="button" onclick="editSoldier()">Submit</button>
+        </form>
+
+        <!-- View Soldier's Squad Details Form -->
+        <form id="squadForm" class="form">
+            <h2>View Soldier's Squad Details</h2>
+            <label for="squadId">Soldier ID:</label>
+            <input type="number" id="squadId" name="squadId" placeholder="Enter Soldier ID">
+            <button type="button" onclick="viewSquad()">Submit</button>
+        </form>
     </div>
-
-    <!-- View Soldier Details Form -->
-    <form id="viewForm" class="form">
-        <h2>View Soldier Details</h2>
-        <label for="viewId">Soldier ID:</label>
-        <input type="number" id="viewId" name="viewId" placeholder="Enter Soldier ID">
-        <button type="button" onclick="viewSoldier()">Submit</button>
-    </form>
-
-    <!-- Edit Soldier Details Form -->
-    <form id="editForm" class="form">
-        <h2>Edit Soldier Details</h2>
-        <label for="editId">Soldier ID:</label>
-        <input type="number" id="editId" name="editId" placeholder="Enter Soldier ID">
-        
-        <label for="editName">Name:</label>
-        <input type="text" id="editName" name="editName" placeholder="Enter Soldier Name">
-        
-        <label for="editRank">Rank:</label>
-        <input type="number" id="editRank" name="editRank" placeholder="Enter Rank">
-        
-        <label for="editRole">Role:</label>
-        <input type="text" id="editRole" name="editRole" placeholder="Enter Role">
-        
-        <label for="editDob">Date of Birth:</label>
-        <input type="date" id="editDob" name="editDob">
-        
-        <button type="button" onclick="editSoldier()">Submit</button>
-    </form>
-
-    <!-- View Soldier's Squad Details Form -->
-    <form id="squadForm" class="form">
-        <h2>View Soldier's Squad Details</h2>
-        <label for="squadId">Soldier ID:</label>
-        <input type="number" id="squadId" name="squadId" placeholder="Enter Soldier ID">
-        <button type="button" onclick="viewSquad()">Submit</button>
-    </form>
 
     <script>
         const API_URL = 'http://localhost:5000'; // Replace with your backend URL
 
         function showForm(formId) {
-            // Hide all forms
             document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
-            // Show the selected form
             document.getElementById(formId).classList.add('active');
         }
 
@@ -119,7 +181,7 @@
             const rank = document.getElementById('editRank').value;
             const role = document.getElementById('editRole').value;
             const dob = document.getElementById('editDob').value;
-            
+
             const payload = { id, name, rank, role, dob };
             try {
                 const response = await fetch(`${API_URL}/soldier`, {
@@ -140,7 +202,7 @@
         async function viewSquad() {
             const id = document.getElementById('squadId').value;
             try {
-                const response = await fetch(`${API_URL}/squad/${id}`);
+                const response = await fetch(`${API_URL}/squad-by-soldier/${id}`);
                 const data = await response.json();
                 alert(`Squad Details:\nName: ${data.squad_name}\nDetails: ${data.squad_details}`);
             } catch (error) {

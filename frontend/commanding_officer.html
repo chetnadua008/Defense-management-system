@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commanding Officer Management</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+            color: #ffffff;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .role-button {
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 15px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .role-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .role-button:active {
+            background-color: #003f7f;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none; /* Initially hide forms */
+        }
+
+        form.active {
+            display: block; /* Show form when active */
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            transform: translateY(-3px);
+        }
+
+        button:active {
+            background-color: #003f7f;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Commanding Officer Management</h1>
+        <div class="button-container">
+            <button class="role-button" onclick="showForm('deleteSoldierForm')">Delete Soldier</button>
+            <button class="role-button" onclick="showForm('soldierEquipmentForm')">Issue Equipment to Soldier</button>
+            <button class="role-button" onclick="showForm('squadEquipmentForm')">Issue Equipment to Squad</button>
+        </div>
+
+        <!-- Delete Soldier Form -->
+        <form id="deleteSoldierForm" class="form">
+            <h2>Delete Soldier</h2>
+            <label for="soldierIdToDelete">Soldier ID:</label>
+            <input type="number" id="soldierIdToDelete" name="soldierIdToDelete" placeholder="Enter Soldier ID">
+            <button type="button" onclick="fetchSoldierDetails()">Get Details</button>
+            
+            <button type="button" onclick="deleteSoldier()">Delete</button>
+        </form>
+
+<!-- Soldier Equipment Form -->
+<form id="soldierEquipmentForm" class="form">
+    <h2>Issue Equipment to Soldier</h2>
+    
+    <label for="equipmentId">Equipment ID:</label>
+    <input type="number" id="equipmentId" name="equipmentId" placeholder="Enter Equipment ID">
+    <button type="button" onclick="fetchEquipmentDetails()">Get Equipment Details</button>
+    
+    <label for="soldierId">Soldier ID:</label>
+    <input type="number" id="soldierId" name="soldierId" placeholder="Enter Soldier ID">
+    <button type="button" onclick="fetchSoldierDetails()">Get Soldier Details</button>
+    
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" placeholder="Enter Quantity">
+    
+    <button type="button" onclick="issueEquipmentToSoldier()">Issue Equipment</button>
+</form>
+<!-- Squad Equipment Form -->
+<form id="squadEquipmentForm" class="form">
+    <h2>Issue Equipment to Squad</h2>
+    
+    <label for="equipmentIdSquad">Equipment ID:</label>
+    <input type="number" id="equipmentIdSquad" name="equipmentIdSquad" placeholder="Enter Equipment ID">
+    <button type="button" onclick="fetchEquipmentDetails()">Get Equipment Details</button>
+    
+    <label for="squadId">Squad ID:</label>
+    <input type="number" id="squadId" name="squadId" placeholder="Enter Squad ID">
+    <button type="button" onclick="fetchSquadDetails()">Get Squad Details</button>
+    
+    
+    
+    <button type="button" onclick="issueEquipmentToSquad()">Issue Equipment</button>
+</form>
+
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000'; // Replace with your backend URL
+
+        function showForm(formId) {
+            document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
+        }
+
+        async function fetchSoldierDetails() {
+        const soldierId = document.getElementById('soldierId').value || document.getElementById('soldierIdToDelete').value;
+
+        if (!soldierId) {
+        alert('Please enter a valid Soldier ID.');
+        return;
+        }
+
+        const response = await fetch(`${API_URL}/soldier/${soldierId}`);
+        const details = await response.json();
+
+        if (response.ok) {
+        alert(`Soldier Details: ${JSON.stringify(details)}`);
+        } else {
+        alert(`Error: ${details.error}`);
+        }
+        }
+        async function fetchEquipmentDetails() {
+            const equipmentId = document.getElementById('equipmentId').value || document.getElementById('equipmentIdSquad').value;
+            const response = await fetch(`${API_URL}/equipment/${equipmentId}`);
+            const details = await response.json();
+            alert(JSON.stringify(details));
+        }
+
+        async function fetchSquadDetails() {
+            const squadId = document.getElementById('squadId').value;
+            const response = await fetch(`${API_URL}/squad/${squadId}`);
+            const details = await response.json();
+            alert(JSON.stringify(details));
+        }
+        async function deleteSoldier() {
+            const soldierID = document.getElementById('soldierIdToDelete').value;
+
+            if (!soldierID) {
+            alert('Please enter a Soldier ID to delete');
+            return;
+            }
+
+            try {
+            const response = await fetch(`${API_URL}/soldier/${soldierID}`, {
+            method: 'DELETE',
+            });
+
+            if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to delete soldier');
+            }
+
+            const result = await response.json();
+            alert(result.message || 'Soldier deleted successfully');
+            } catch (error) {
+            alert(`Error: ${error.message}`);
+            }
+        }
+        async function issueEquipmentToSoldier() {
+    const equipmentID = document.getElementById('equipmentId').value; // Equipment ID input
+    const soldierID = document.getElementById('soldierId').value;     // Soldier ID input
+    const equipmentCount = document.getElementById('quantity').value; // Equipment Count input
+
+    const response = await fetch(`${API_URL}/equipment/soldier`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            equipmentId: equipmentID,
+            soldierId: soldierID,
+            equipmentCount: equipmentCount
+        }),
+    });
+
+    const result = await response.json();
+    alert(result.message || result.error); // Alert success or error message
+}
+
+async function issueEquipmentToSquad() {
+    const equipmentID = document.getElementById('equipmentIdSquad').value;
+    const squadID = document.getElementById('squadId').value;
+
+    const response = await fetch(`${API_URL}/equipment/squad`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ equipmentId: equipmentID,squadId: squadID}),
+    });
+
+    const result = await response.json();
+    alert(result.message || result.error);
+}
+
+
+    </script>
+</body>
+</html>
